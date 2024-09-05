@@ -9,6 +9,9 @@ export class HeroesRepository {
   async findAll(): Promise<HeroesDocument[]> {
     return this.heroesModel.find().exec();
   }
+  async findById(id: string): Promise<HeroesDocument> {
+    return this.heroesModel.findById(id);
+  }
   async create(createHeroDTO: any): Promise<Heroes> {
     const createdHeroe = new this.heroesModel(createHeroDTO);
     return createdHeroe.save();
