@@ -1,6 +1,6 @@
-import { Body, Controller, Get, InternalServerErrorException, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, InternalServerErrorException, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { HeroesService } from './heroes.service';
-import { HeroesResponseDTO } from './dtos/heroes.dto';
+import { HeroesResponseDTO, UpdateHeroDTO, UpdateHeroParamDTO } from './dtos/heroes.dto';
 
 @Controller('heroes')
 
@@ -19,10 +19,24 @@ export class HeroesController {
     }
     
   }
-  @Get(':id')
-  async findById(@Param("id") id: string): Promise<HeroesResponseDTO> {
+  @Get(":id")
+  async findById(@Param() getHeroParamDTO: UpdateHeroParamDTO): Promise<HeroesResponseDTO> {
     try{
-      const heroes= await this.heroesService.findById(id)
+      const heroes= await this.heroesService.findById(getHeroParamDTO.id)
+      return heroes;
+    }catch(error){  
+      if (error.message === "hero not found") throw new NotFoundException({
+        message: error.message
+      })
+      throw new InternalServerErrorException({
+        message:"there was an error"
+      })
+    }
+  }
+  @Put(":id")
+  async updateById(@Param() updateHeroParamDTO: UpdateHeroParamDTO, @Body() updateHeroDTO: UpdateHeroDTO): Promise<HeroesResponseDTO> {
+    try{
+      const heroes= await this.heroesService.updateById(updateHeroParamDTO.id, updateHeroDTO)
       return heroes;
     }catch(error){
       if (error.message === "hero not found") throw new NotFoundException({
@@ -32,9 +46,24 @@ export class HeroesController {
         message:"there was an error"
       })
     }
-}
+  }
   @Post()
   async create(@Body() createHeroDTO): Promise<any>{
     return this.heroesService.create(createHeroDTO)
+  }
+  @Delete(":id")
+  async deleteById(@Param() deleteHeroParamDTO: UpdateHeroParamDTO): Promise<HeroesResponseDTO> {
+    try{
+      const {id} = deleteHeroParamDTO
+      const heroes= await this.heroesService.deleteById(id)
+      return heroes;
+    }catch(error){
+      if (error.message === "hero not found") throw new NotFoundException({
+        message: error.message
+      })
+      throw new InternalServerErrorException({
+        message:"there was an error"
+      })
+    }
   }
 }
