@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, InternalServerErrorException, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { HeroesService } from './heroes.service';
-import { HeroesResponseDTO, UpdateHeroDTO, UpdateHeroParamDTO } from './dtos/heroes.dto';
+import { CreateHeroDTO, HeroesResponseDTO, UpdateHeroDTO, UpdateHeroParamDTO } from './dtos/heroes.dto';
 
 @Controller('heroes')
 
@@ -48,7 +48,7 @@ export class HeroesController {
     }
   }
   @Post()
-  async create(@Body() createHeroDTO): Promise<any>{
+  async create(@Body() createHeroDTO : CreateHeroDTO): Promise<HeroesResponseDTO>{
     return this.heroesService.create(createHeroDTO)
   }
   @Delete(":id")

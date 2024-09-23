@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { HeroesRepository } from './heroes.repository';
 import { HeroesResponseDTO, UpdateHeroDTO } from './dtos/heroes.dto';
 
-
 @Injectable()
 export class HeroesService {
     constructor(private heroesRepository: HeroesRepository) {}
