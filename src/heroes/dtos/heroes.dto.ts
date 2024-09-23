@@ -1,3 +1,4 @@
+import { Transform } from "class-transformer";
 import { IsDateString, IsInt, IsMongoId, IsString, Max, MaxLength, Min, min, MinLength } from "class-validator";
 export class HeroesResponseDTO {
     id: string;
@@ -56,6 +57,7 @@ export class CreateHeroDTO{
   @IsInt()
   @Min(0)
   @Max(99999)
+  @Transform(({ value }) => parseInt(value, 10), { toClassOnly: true })
   age: number;
 
   @IsString()
